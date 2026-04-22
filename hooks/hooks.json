@@ -1,0 +1,29 @@
+{
+    "hooks": {
+        "SubagentStop": [
+            {
+                "matcher": "implementation-executor",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/verify_impl_task.py",
+                        "timeout": 180
+                    }
+                ]
+            }
+        ],
+        "PostToolUse": [
+            {
+                "matcher": "Bash",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/post_compiled_script.py",
+                        "timeout": 60,
+                        "statusMessage": "Post compiled script hook fired"
+                    }
+                ]
+            }
+        ]
+    }
+}
