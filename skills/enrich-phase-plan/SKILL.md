@@ -56,7 +56,7 @@ If no fix plans or deferred files exist, proceed without this context.
 
 ## Step 2 — fortran-architect elaboration
 
-Invoke the `fortran-development-pipeline:fortran-architect` agent with this prompt:
+Invoke the `fortran-dev-pipeline:fortran-architect` agent with this prompt:
 
 ```
 You are reviewing the following implementation plan for the NEXT phase of work on a Fortran scientific codebase.
@@ -86,7 +86,7 @@ Capture the output as `ELABORATED_PLAN`.
 
 ## Step 3 — plan-decomposer breakdown
 
-Invoke the `fortran-development-pipeline:plan-decomposer` agent with this prompt:
+Invoke the `fortran-dev-pipeline:plan-decomposer` agent with this prompt:
 
 ```
 Break down the following elaborated implementation plan into minimum-viable, SRP-aligned subtasks for a Fortran implementation-executor agent.
@@ -148,7 +148,7 @@ Capture the output as `DECOMPOSED_PLAN`.
 
 ## Step 4 — impl-plan-reviewer loop
 
-Invoke the `fortran-development-pipeline:impl-plan-reviewer` agent with this prompt:
+Invoke the `fortran-dev-pipeline:impl-plan-reviewer` agent with this prompt:
 
 ```
 Review the following decomposed implementation plan. For each task, report whether it is CLEAR, UNCLEAR, or BLOCKED. End with your overall verdict.
@@ -159,7 +159,7 @@ Review the following decomposed implementation plan. For each task, report wheth
 ```
 
 - If the verdict is **Ready to Implement**: proceed to Step 4.5.
-- If the verdict is **Needs More Detail**: collect the flagged issues, then re-invoke `fortran-development-pipeline:plan-decomposer` with the original decomposed plan plus the reviewer's feedback, asking it to revise only the flagged tasks. Repeat this loop (max 3 iterations). If still not passing after 3 iterations, surface the remaining issues to the user and ask how to proceed.
+- If the verdict is **Needs More Detail**: collect the flagged issues, then re-invoke `fortran-dev-pipeline:plan-decomposer` with the original decomposed plan plus the reviewer's feedback, asking it to revise only the flagged tasks. Repeat this loop (max 3 iterations). If still not passing after 3 iterations, surface the remaining issues to the user and ask how to proceed.
 
 ## Step 4.5 — Dry-run compilation
 
@@ -187,7 +187,7 @@ After the reviewer approves the decomposed plan, validate that the plan's combin
 
 5. **If compilation succeeds**: proceed to Step 5.
 
-6. **If compilation fails**: feed the error output back to the `fortran-development-pipeline:plan-decomposer` agent with this prompt:
+6. **If compilation fails**: feed the error output back to the `fortran-dev-pipeline:plan-decomposer` agent with this prompt:
    ```
    The decomposed plan failed dry-run compilation. Here are the errors:
 
@@ -207,7 +207,7 @@ After the reviewer approves the decomposed plan, validate that the plan's combin
 
 ## Step 5 — fortran-architect final review
 
-Invoke the `fortran-development-pipeline:fortran-architect` agent with this prompt:
+Invoke the `fortran-dev-pipeline:fortran-architect` agent with this prompt:
 
 ```
 You performed an architectural elaboration earlier. Now review the final decomposed plan below to ensure it has not drifted from the architectural intent.

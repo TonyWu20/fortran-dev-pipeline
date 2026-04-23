@@ -64,7 +64,7 @@ Automatically collect background before engaging the user:
 
 ### Step 2: Propose Phase Goals
 
-Invoke the `fortran-development-pipeline:fortran-architect` agent to synthesize the context and propose a set of goals for the next phase:
+Invoke the `fortran-dev-pipeline:fortran-architect` agent to synthesize the context and propose a set of goals for the next phase:
 
 ```
 You are helping define the next phase of a Fortran scientific project.
@@ -111,7 +111,7 @@ Discuss the proposed goals with the user. Typical questions to work through:
 - What are the hard constraints (numerical correctness, API stability, performance, deadline)?
 - What should explicitly be **out of scope** for this phase?
 
-Use the `fortran-development-pipeline:fortran-architect` agent for follow-up analysis as needed (e.g., if the user wants to explore a specific design direction or numerical algorithm choice).
+Use the `fortran-dev-pipeline:fortran-architect` agent for follow-up analysis as needed (e.g., if the user wants to explore a specific design direction or numerical algorithm choice).
 
 There is no fixed number of rounds — continue until the user is satisfied with the scope.
 

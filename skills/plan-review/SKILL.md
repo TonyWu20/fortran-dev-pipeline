@@ -47,7 +47,7 @@ If no path is given, ask the user.
 
 ### Step 2: fortran-architect Review
 
-Pass everything to the `fortran-development-pipeline:fortran-architect` agent with this prompt:
+Pass everything to the `fortran-dev-pipeline:fortran-architect` agent with this prompt:
 
 ```
 You are performing a pre-implementation architectural review of a Fortran scientific project.

@@ -22,7 +22,7 @@ python3 -c "
 import json; from pathlib import Path
 p = Path.home() / '.claude/plugins/installed_plugins.json'
 data = json.loads(p.read_text())
-for key in ['fortran-development-pipeline@my-claude-marketplace', 'fortran-development-pipeline@local']:
+for key in ['fortran-dev-pipeline@my-claude-marketplace', 'fortran-dev-pipeline@local']:
     if key in data['plugins']:
         print(data['plugins'][key][0]['installPath']); break
 "
