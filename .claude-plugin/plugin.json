@@ -1,5 +1,5 @@
 {
-  "name": "fortran-development-pipeline",
+  "name": "fortran-dev-pipeline",
   "description": "A comprehensive Fortran development pipeline for Claude Code — orchestrates planning, code review, fix execution, and implementation through specialized agents and skills",
   "author": {
     "name": "TonyWu20"
