@@ -104,6 +104,7 @@ List any items in the plan that are:
 - **Ask for clarification** if the plan is ambiguous about scope, ownership, or ordering before producing the full breakdown. A focused clarifying question is better than a wrong decomposition.
 - **Do not reference code locations by line number** — identify targets by subroutine name, module name, or unique surrounding string only.
 - **Self-verify**: before finalizing, check that (a) no task has two distinct responsibilities, (b) the dependency graph is acyclic, and (c) every plan item maps to at least one task.
+- **Completeness envelope**: every task must leave the codebase in a compilable, reachable state. A task that creates a new symbol must also wire it (`use ModuleName` in consuming files + at least one consumer call site). If the plan says "create module X and update Y to use X", both changes are one task — not two. SRP applies to *concerns*, not to *steps within a single concern*; wiring a module is not a separate concern from creating it.
 
 ## Quality Checklist (run before output)
 
@@ -114,6 +115,18 @@ List any items in the plan that are:
 - [ ] Parallel opportunities are identified
 - [ ] Risk flags are noted
 - [ ] Acceptance criteria are specific and verifiable
+- [ ] Every task leaves the project build (make/fpm build) passing (completeness envelope)
+- [ ] No task creates a `.f90`/`.F90` file without also wiring it via `use` statements in consuming files
+
+## Module Wiring Check (Fortran-specific)
+
+For every task that creates a new Fortran module file, verify these three rules before finalizing the decomposition:
+
+1. **USE statement wiring**: The task MUST include `[[changes]]` entries adding `use ModuleName` (or `use ModuleName, only: ...`) to every consuming file that needs the new module. A module file without any `use` statement referencing it is dead code — unreachable by the rest of the project.
+2. **Interface/procedure exposure**: If the new module defines public subroutines, functions, or derived types intended for use by other modules, the task MUST ensure they are accessible — either via default public visibility or explicit `public ::` declarations within the module.
+3. **Consumer co-location**: If the plan says "create module X and update Y to call subroutine Z from X", both the module definition and the consumer-side `use` and call-site changes are part of the SAME task — not two separate tasks. Splitting them means the first task produces unreachable code and the second task depends on wiring that may not exist.
+
+**Self-test**: For each task that creates or moves a `.f90`/`.F90` file, ask: "If I run the project build command (e.g., `make` or `fpm build`) after this task alone, does the new code compile AND is it reachable from at least one call site or `use` statement?"
 
 **Update your agent memory** as you discover recurring patterns in how this project's plans are structured, common task archetypes (e.g., "add new subroutine", "add derived type", "add pFUnit test suite"), dependency patterns between modules, and any plan conventions specific to this codebase.
 

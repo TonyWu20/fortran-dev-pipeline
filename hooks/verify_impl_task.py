@@ -112,7 +112,7 @@ def resolve_sidecar(hook_input: dict) -> tuple[Path | None, dict | None]:
     return None, None
 
 
-def run_command(cmd: str, cwd: str) -> dict:
+def run_command(cmd: str, cwd: str, timeout: int = 120) -> dict:
     """Run a shell command, return {command, exit_code, stdout, stderr}."""
     try:
         result = subprocess.run(
@@ -121,7 +121,7 @@ def run_command(cmd: str, cwd: str) -> dict:
             cwd=cwd,
             capture_output=True,
             text=True,
-            timeout=120,
+            timeout=timeout,
         )
         return {
             "command": cmd,
@@ -134,7 +134,7 @@ def run_command(cmd: str, cwd: str) -> dict:
             "command": cmd,
             "exit_code": -1,
             "stdout": "",
-            "stderr": "Command timed out after 120 seconds",
+            "stderr": f"Command timed out after {timeout} seconds",
         }
     except Exception as e:
         return {
@@ -299,6 +299,22 @@ def main() -> None:
         r = run_command(cmd, PROJECT_DIR)
         results.append(r)
         if r["exit_code"] != 0:
+            all_passed = False
+
+    # ── Step B.2: Workspace-level compilation gate ────────────────────────
+    #
+    # Catches cross-module breakages (missing USE statements, stale imports)
+    # that per-file acceptance commands miss.  Only runs when task-specific
+    # checks pass — no point building the whole project if the task itself
+    # fails.
+
+    if all_passed and acceptance_commands:
+        build_cmd = os.environ.get("FORTRAN_BUILD_CMD", "make 2>&1")
+        workspace_check = run_command(
+            build_cmd, PROJECT_DIR, timeout=180
+        )
+        results.append(workspace_check)
+        if workspace_check["exit_code"] != 0:
             all_passed = False
 
     task_status = "passed" if all_passed else "failed"

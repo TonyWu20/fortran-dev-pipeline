@@ -25,7 +25,7 @@ The pipeline targets DFT/EDFT-style numerical Fortran codes (Fortran 90/95/2003/
       │  Output: notes/plan-reviews/{slug}/decisions.md
       ▼
 /enrich-phase-plan
-      │  architect elaboration → plan-decomposer TOML → impl-plan-reviewer loop → architect final review
+      │  architect elaboration → plan-decomposer TOML → impl-plan-reviewer loop → dry-run compile gate → architect final review
       │  Output: plans/phase-{N}/impl-plan.toml
       ▼
 /compile-plan
@@ -34,7 +34,7 @@ The pipeline targets DFT/EDFT-style numerical Fortran codes (Fortran 90/95/2003/
       ▼
 /implementation-executor
       │  Launches implementation-executor subagents per task
-      │  Hooks: auto-verify, checkpoint, commit after each task
+      │  Hooks: auto-verify (per-task + workspace build), checkpoint, commit after each task
       ▼
 /review-pr                           ← Gate 2
       │  Scoped review: [Defect] and [Correctness] → fix plan
@@ -134,6 +134,10 @@ skills/
   plan-review/SKILL.md
   review-pr/SKILL.md
 ```
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## License
 
